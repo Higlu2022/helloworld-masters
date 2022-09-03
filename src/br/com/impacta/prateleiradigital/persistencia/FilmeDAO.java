@@ -60,11 +60,11 @@ public class FilmeDAO {
             statement = getConnection().createStatement();
             resultSet = statement.executeQuery(queryConsultAll);
         } else {
-            String queryConsult = "SELECT * FROM impacta.filme " +
+            String queryConsult =  "SELECT * FROM impacta.filme " +
                     "where genero like \"%" + genero + "%\"" +
                     "and titulo like \"%" + tituloParcial + "%\"" +
-                    "and ano between  " + anoInicial + "and" +
-                    "and titulo like \"%" + tituloParcial + "%\"";
+                    "and ano between " + anoInicial + " and " + anoFinal +
+                    " order by titulo, numDeVotos desc";
 
             statement = getConnection().createStatement();
             resultSet = statement.executeQuery(queryConsult);

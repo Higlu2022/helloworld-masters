@@ -3,8 +3,11 @@ package br.com.impacta.prateleiradigital.controle;
 import br.com.impacta.prateleiradigital.negocio.Filme;
 import br.com.impacta.prateleiradigital.persistencia.FilmeDAO;
 
+import java.io.*;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class FilmeControlador {
 
@@ -17,7 +20,7 @@ public class FilmeControlador {
     }
 
     public List<Filme> consultarFilmes(String tituloParcial, String genero, int anoInicial, int anoFinal) throws SQLException {
-        //TODO implementar regra para consultar uma lista de filmes
+
 
         return filmeDAO.consultarListaDeFilmes(tituloParcial, genero, anoInicial, anoFinal);
     }
@@ -34,7 +37,7 @@ public class FilmeControlador {
     }
 
     public Filme sortear(String genero, String diretores, double notaMinima, int numeroDeVotos) throws SQLException {
-        //TODO Implementar a regra para sortear o filme
+
         return filmeDAO.consultarFilme(genero, diretores, notaMinima, numeroDeVotos);
     }
 
@@ -45,12 +48,36 @@ public class FilmeControlador {
 
     }
 
-    public void imoportarListaDeFilmes(String caminho) {
-        //TODO Implementar a regra para importar um filme
-        //TODO Verificar o caminho do arquivo e ler os dados para criar uma lista de filmes com os dados do arquivo
+    public void imoportarListaDeFilmes(String caminhoDoArquivo) throws IOException, SQLException {
 
-        //TODO criar uma ForEach para chamar o método adicionar para cada elemento da lista
+        List<Filme> filmeList = new ArrayList<>();
+        File file = new File(caminhoDoArquivo);
 
+        FileReader fileReader = new FileReader(file);
+        BufferedReader bR = new BufferedReader(fileReader);
+
+        String linha;
+        bR.readLine();
+
+        while ((linha = bR.readLine()) != null) {
+            String[] array = linha.split(";");
+            Filme filme = new Filme();
+            filme.setTitulo(array[0]);
+            filme.setDiretores(array[1]);
+            filme.setNota(Double.parseDouble(array[2]));
+            filme.setDuracao(Integer.parseInt(array[3]));
+            filme.setAno(Integer.parseInt(array[4]));
+            filme.setGenero(array[5]);
+            filme.setNumDeVotos(Integer.parseInt(array[6]));
+            filme.setUrl(array[7]);
+
+
+            filmeList.add(filme);
+
+        }
+        bR.close();
+
+        filmeDAO.incluirLista(filmeList);
 
     }
 
