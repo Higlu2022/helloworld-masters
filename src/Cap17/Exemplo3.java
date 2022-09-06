@@ -24,6 +24,7 @@ public class Exemplo3 {
 
         });
         thread.start();
+        Thread.yield();
     }
 
 
